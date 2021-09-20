@@ -20,7 +20,7 @@ var configDefault = Config{
 	AllowHeaders: "",
 }
 
-func New(config ...Config) func(next ngamux.HandlerFunc) ngamux.HandlerFunc {
+func New(config ...Config) func(next ngamux.Handler) ngamux.Handler {
 	cfg := configDefault
 
 	if len(config) > 0 {
@@ -39,7 +39,7 @@ func New(config ...Config) func(next ngamux.HandlerFunc) ngamux.HandlerFunc {
 
 	allowOrigins := strings.Split(strings.ReplaceAll(cfg.AllowOrigins, " ", ""), ",")
 
-	return func(next ngamux.HandlerFunc) ngamux.HandlerFunc {
+	return func(next ngamux.Handler) ngamux.Handler {
 		return func(rw http.ResponseWriter, r *http.Request) error {
 			// Every Request
 			origin := r.Referer()

@@ -17,14 +17,14 @@ var configDefault = Config{
 	},
 }
 
-func New(config ...Config) func(next ngamux.HandlerFunc) ngamux.HandlerFunc {
+func New(config ...Config) func(next ngamux.Handler) ngamux.Handler {
 	cfg := configDefault
 
 	if len(config) > 0 {
 		cfg = config[0]
 	}
 
-	return func(next ngamux.HandlerFunc) ngamux.HandlerFunc {
+	return func(next ngamux.Handler) ngamux.Handler {
 		return func(rw http.ResponseWriter, r *http.Request) error {
 			defer func() {
 				if err := recover(); err != nil {
