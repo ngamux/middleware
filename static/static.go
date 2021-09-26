@@ -27,8 +27,9 @@ func New(configs ...Config) func(next ngamux.Handler) ngamux.Handler {
 			if isGetStatic {
 				filePath := path.Join(cfg.Root, strings.TrimPrefix(r.URL.Path, cfg.Prefix))
 				http.ServeFile(rw, r, filePath)
+				return nil
 			}
-			return nil
+			return next(rw, r)
 		}
 	}
 }
