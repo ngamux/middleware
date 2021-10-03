@@ -1,2 +1,4 @@
+github.com/golang-jwt/jwt/v4 v4.1.0 h1:XUgk2Ex5veyVFVeLm0xhusUTQybEbexJXrvPNOKkSY0=
+github.com/golang-jwt/jwt/v4 v4.1.0/go.mod h1:/xlHOz8bRuivTWchD4jCa+NbatV+wEUSzwAxVc6locg=
 github.com/ngamux/ngamux v1.0.3 h1:Ma+ACFidpETC5IYb4C9fR94+wMpOCAKvlGw4LG7DPpU=
 github.com/ngamux/ngamux v1.0.3/go.mod h1:V6GvzXjgxd/sJn7vkhS+QRbHkvBbmyxd9caDFdtKXQo=
