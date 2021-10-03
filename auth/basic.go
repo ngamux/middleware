@@ -80,8 +80,12 @@ func (c *BasicConfig) defaultAuthorizer(username string, password string) bool {
 }
 
 func (c *BasicConfig) defaultBasicErrorHandler(rw http.ResponseWriter, err error) error {
+	// when realm has a value, we set a header WWW-Authenticate to force user agent
+	// that it need to use basic authentication in the given realm. Most browser will then
+	// re-request when they see the header and show a prompt that we need to enter username and password
+	// for the specified realm. The browser can also cache the credential for the subsequent request in the same realm.
 	if c.Realm != "" {
-		rw.Header().Add("WWW-Authenticate", "Basic realm="+c.Realm)
+		rw.Header().Set("WWW-Authenticate", "Basic realm="+c.Realm)
 	}
 
 	return ngamux.JSONWithStatus(rw, http.StatusUnauthorized, ngamux.Map{
