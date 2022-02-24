@@ -19,11 +19,10 @@ jobs:
       - name: Check out into the root
         uses: actions/checkout@v2
 
-      - name: Lint Auth
+      - name: Lint
         uses: golangci/golangci-lint-action@v2
         with:
           version: latest
-          working-directory: ./auth
 
   test:
     runs-on: ubuntu-latest
