@@ -20,7 +20,7 @@ jobs:
         uses: golangci/golangci-lint-action@v2
         with:
           version: latest
-          working-directory: auth
+          working-directory: ./auth
 
   test:
     runs-on: ubuntu-latest
