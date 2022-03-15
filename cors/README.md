@@ -2,6 +2,11 @@
 Middleware to manage [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
 
 # Usage
+## Import
+```go
+import "github.com/ngamux/middleware/cors"
+```
+
 ## Instance With Default Config
 ```go
 corsMiddleware := cors.New()
