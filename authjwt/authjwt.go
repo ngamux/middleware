@@ -1,4 +1,4 @@
-package auth
+package authjwt
 
 import (
 	"errors"
@@ -13,36 +13,14 @@ var (
 	ErrorForbidden = errors.New("forbidden")
 )
 
-type JWTConfig struct {
-	SigningKey   []byte
-	ContextKey   string
-	ErrorHandler func(rw http.ResponseWriter, err error) error
-}
-
 func defaultErrorHandler(rw http.ResponseWriter, err error) error {
 	return ngamux.Res(rw).Status(http.StatusForbidden).JSON(ngamux.Map{
 		"error": err.Error(),
 	})
 }
 
-func makeConfig(config JWTConfig) JWTConfig {
-	if config.ContextKey == "" {
-		config.ContextKey = "token"
-	}
-
-	if config.ErrorHandler == nil {
-		config.ErrorHandler = defaultErrorHandler
-	}
-
-	return config
-}
-
-func (config JWTConfig) keyFunc(t *jwt.Token) (interface{}, error) {
-	return config.SigningKey, nil
-}
-
-func JWT(configs ...JWTConfig) ngamux.MiddlewareFunc {
-	var config JWTConfig
+func New(configs ...Config) func(next ngamux.Handler) ngamux.Handler {
+	var config Config
 	if len(configs) > 0 {
 		config = configs[0]
 	}
@@ -50,7 +28,7 @@ func JWT(configs ...JWTConfig) ngamux.MiddlewareFunc {
 
 	return func(next ngamux.Handler) ngamux.Handler {
 		return func(rw http.ResponseWriter, r *http.Request) error {
-			authorizationHeader := r.Header.Get("authorization")
+			authorizationHeader := r.Header.Get(config.Header)
 			if authorizationHeader == "" {
 				return config.ErrorHandler(rw, ErrorForbidden)
 			}
@@ -58,8 +36,9 @@ func JWT(configs ...JWTConfig) ngamux.MiddlewareFunc {
 			tokenString := strings.ReplaceAll(authorizationHeader, "Bearer ", "")
 			token, err := jwt.Parse(tokenString, config.keyFunc)
 			if err == nil && token.Valid {
-				r = ngamux.SetContextValue(r, config.ContextKey, token)
-				return next(rw, r)
+				tmpR := ngamux.Req(r)
+				tmpR.Locals(config.ContextKey, token)
+				return next(rw, tmpR.Request)
 			}
 
 			return config.ErrorHandler(rw, err)
