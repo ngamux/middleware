@@ -26,14 +26,14 @@ func New(configs ...Config) ngamux.MiddlewareFunc {
 
 			req, err := http.NewRequest(r.Method, redirectTo, nil)
 			if err != nil {
-				return ngamux.StringWithStatus(rw, http.StatusInternalServerError, err.Error())
+				return ngamux.Res(rw).Status(http.StatusInternalServerError).String(err.Error())
 			}
 
 			client := &http.Client{}
 			res, err := client.Do(req)
 			if err != nil {
 				fmt.Println(err)
-				return ngamux.StringWithStatus(rw, res.StatusCode, err.Error())
+				return ngamux.Res(rw).Status(res.StatusCode).String(err.Error())
 			}
 
 			rw.Header().Set("content-type", res.Header.Get("content-type"))

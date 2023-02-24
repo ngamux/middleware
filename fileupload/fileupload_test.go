@@ -1,7 +1,6 @@
 package fileupload
 
 import (
-	"github.com/ngamux/ngamux"
 	"image"
 	"image/color"
 	"image/png"
@@ -12,11 +11,12 @@ import (
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/ngamux/ngamux"
 )
-import _ "github.com/ngamux/ngamux"
 
 func TestFileUpload(t *testing.T) {
-	mux := ngamux.NewNgamux()
+	mux := ngamux.New()
 	mux.Put("/profiles", New(Config{
 		Destination: "uploads/pictures",
 		FormKey:     "report",

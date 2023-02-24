@@ -20,7 +20,7 @@ type JWTConfig struct {
 }
 
 func defaultErrorHandler(rw http.ResponseWriter, err error) error {
-	return ngamux.JSONWithStatus(rw, http.StatusForbidden, ngamux.Map{
+	return ngamux.Res(rw).Status(http.StatusForbidden).JSON(ngamux.Map{
 		"error": err.Error(),
 	})
 }

@@ -88,7 +88,7 @@ func (c *BasicConfig) defaultBasicErrorHandler(rw http.ResponseWriter, err error
 		rw.Header().Set("WWW-Authenticate", "Basic realm="+c.Realm)
 	}
 
-	return ngamux.JSONWithStatus(rw, http.StatusUnauthorized, ngamux.Map{
+	return ngamux.Res(rw).Status(http.StatusUnauthorized).JSON(ngamux.Map{
 		"error": err.Error(),
 	})
 }
