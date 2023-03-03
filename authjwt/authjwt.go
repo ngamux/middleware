@@ -14,7 +14,7 @@ var (
 )
 
 func defaultErrorHandler(rw http.ResponseWriter, err error) error {
-	return ngamux.Res(rw).Status(http.StatusForbidden).JSON(ngamux.Map{
+	return ngamux.Res(rw).Status(http.StatusForbidden).Json(ngamux.Map{
 		"error": err.Error(),
 	})
 }

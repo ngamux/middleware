@@ -20,7 +20,7 @@ func New(config ...Config) func(next ngamux.Handler) ngamux.Handler {
 	return func(next ngamux.Handler) ngamux.Handler {
 		return func(rw http.ResponseWriter, r *http.Request) error {
 			if r.URL.Path == cfg.Path {
-				return ngamux.Res(rw).String("pong")
+				return ngamux.Res(rw).Text("pong")
 			}
 
 			return next(rw, r)
