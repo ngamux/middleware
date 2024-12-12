@@ -16,6 +16,7 @@ var configDefault = Config{
 		http.MethodPut,
 		http.MethodPatch,
 		http.MethodDelete,
+		http.MethodOptions,
 	}, ","),
 	AllowHeaders: "",
 }
@@ -36,42 +37,35 @@ func New(config ...Config) func(next ngamux.Handler) ngamux.Handler {
 		cfg.AllowMethods = strings.ReplaceAll(cfg.AllowMethods, " ", "")
 		cfg.AllowHeaders = strings.ReplaceAll(cfg.AllowHeaders, " ", "")
 	}
-
-	allowOrigins := strings.Split(strings.ReplaceAll(cfg.AllowOrigins, " ", ""), ",")
+	allowedOrigins := strings.Split(cfg.AllowOrigins, ",")
 
 	return func(next ngamux.Handler) ngamux.Handler {
 		return func(rw http.ResponseWriter, r *http.Request) error {
-			// Every Request
+			allowed := false
 			origin := r.Referer()
-			allowOrigin := ""
-			if len(origin) > 0 {
-				if origin[len(origin)-1] == byte('/') {
-					origin = origin[:len(origin)-1]
+			if origin == "" {
+				origin = r.Header.Get("Origin")
+			}
+			origin = strings.TrimRight(origin, "/")
+			for _, o := range allowedOrigins {
+				o = strings.TrimSpace(o)
+				if o == "*" || o == origin {
+					allowed = true
+					break
 				}
-
-				for _, ao := range allowOrigins {
-					if ao == "*" {
-						allowOrigin = ao
-						break
-					}
-					if matchSubdomain(origin, ao) {
-						allowOrigin = origin
-						break
-					}
-				}
-				rw.Header().Set("Access-Control-Allow-Origin", allowOrigin)
 			}
 
-			// Normal Request
-			if r.Method != http.MethodOptions {
-				return next(rw, r)
+			if allowed {
+				rw.Header().Set("Access-Control-Allow-Origin", origin)
 			}
-
-			// Preflight Request
 			rw.Header().Set("Access-Control-Allow-Methods", cfg.AllowMethods)
 			rw.Header().Set("Access-Control-Allow-Headers", cfg.AllowHeaders)
-			rw.WriteHeader(http.StatusNoContent)
-			return nil
+
+			if r.Method == http.MethodOptions {
+				return ngamux.Res(rw).Status(http.StatusNoContent).Text("")
+			}
+
+			return next(rw, r)
 		}
 	}
 }
