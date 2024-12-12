@@ -4,5 +4,5 @@ go 1.22
 
 require (
 	github.com/golang-jwt/jwt/v4 v4.5.0
-	github.com/ngamux/ngamux v1.6.2
+	github.com/ngamux/ngamux v1.6.3
 )
