@@ -1,8 +1,9 @@
 package log
 
 import (
-	"bytes"
+	"log/slog"
 	"net/http"
+	"os"
 
 	"github.com/ngamux/ngamux"
 )
@@ -14,21 +15,20 @@ const (
 )
 
 func New(config ...Config) func(next ngamux.Handler) ngamux.Handler {
-	cfg := &configDefault
+	cfg := configDefault()
+	cfg.Handler = slog.NewJSONHandler(os.Stdout, nil)
 
 	if len(config) > 0 {
-		*cfg = config[0]
+		cfg = config[0]
 	}
 
-	logString := new(bytes.Buffer)
 	lrw := new(logResponseWriter)
+	logger := slog.New(cfg.Handler)
 	return func(next ngamux.Handler) ngamux.Handler {
 		return func(rw http.ResponseWriter, r *http.Request) error {
 			newLogResponseWriter(lrw, rw)
 			handle := next(lrw, r)
-			buildLog(logString, cfg.Format, lrw, r)
-			println(logString.String())
-			logString.Reset()
+			logger.Info("", "method", r.Method, "path", r.URL.Path, "status", lrw.statusCode)
 			return handle
 		}
 	}

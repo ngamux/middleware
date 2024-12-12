@@ -1,9 +1,13 @@
 package log
 
+import (
+	"log/slog"
+)
+
 type Config struct {
-	Format string
+	Handler slog.Handler
 }
 
-var configDefault Config = Config{
-	Format: "${method} ${path} ${status}",
+func configDefault() Config {
+	return Config{}
 }
