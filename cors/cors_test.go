@@ -17,7 +17,7 @@ func BenchmarkCors(b *testing.B) {
 
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
-			result(rec, req)
+			_ = result(rec, req)
 		}
 	})
 }

@@ -1,10 +1,11 @@
 package fileupload
 
 import (
-	"github.com/ngamux/ngamux"
 	"io"
 	"net/http"
 	"os"
+
+	"github.com/ngamux/ngamux"
 )
 
 func New(config Config) ngamux.MiddlewareFunc {
@@ -33,6 +34,9 @@ func New(config Config) ngamux.MiddlewareFunc {
 			_ = os.MkdirAll(config.Destination, 0700)
 
 			destination, err := os.Create(config.Destination + string(os.PathSeparator) + filename)
+			if err != nil {
+				return err
+			}
 
 			defer destination.Close()
 			if err != nil {

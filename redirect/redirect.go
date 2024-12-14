@@ -38,7 +38,7 @@ func New(configs ...Config) ngamux.MiddlewareFunc {
 
 			rw.Header().Set("content-type", res.Header.Get("content-type"))
 			rw.WriteHeader(res.StatusCode)
-			io.Copy(rw, res.Body)
+			_, _ = io.Copy(rw, res.Body)
 			defer res.Body.Close()
 			return nil
 		}

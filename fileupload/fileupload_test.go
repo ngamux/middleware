@@ -25,7 +25,7 @@ func TestFileUpload(t *testing.T) {
 		},
 	})(func(rw http.ResponseWriter, r *http.Request) error {
 		rw.WriteHeader(200)
-		rw.Write([]byte("Ok"))
+		_, _ = rw.Write([]byte("Ok"))
 		return nil
 	}))
 
