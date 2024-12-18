@@ -10,46 +10,55 @@ import (
 
 func New(config Config) ngamux.MiddlewareFunc {
 	return func(next ngamux.Handler) ngamux.Handler {
-		return func(rw http.ResponseWriter, r *http.Request) error {
+		return func(rw http.ResponseWriter, r *http.Request) {
+			res := ngamux.Res(rw)
 			err := r.ParseMultipartForm(config.MaxMemoryLimit)
 
 			if err != nil {
-				return err
+				res.Status(http.StatusBadRequest).Text(err.Error())
+				return
 			}
 
 			file, _, err := r.FormFile(config.FormKey)
 
 			if err != nil {
-				return err
+				res.Status(http.StatusBadRequest).Text(err.Error())
+				return
 			}
 
 			defer file.Close()
 
 			filename, err := config.FilenameFunc(r)
-
 			if err != nil {
-				return err
+				res.Status(http.StatusBadRequest).Text(err.Error())
+				return
 			}
 
-			_ = os.MkdirAll(config.Destination, 0700)
+			err = os.MkdirAll(config.Destination, 0700)
+			if err != nil {
+				res.Status(http.StatusBadRequest).Text(err.Error())
+				return
+			}
 
 			destination, err := os.Create(config.Destination + string(os.PathSeparator) + filename)
 			if err != nil {
-				return err
+				res.Status(http.StatusBadRequest).Text(err.Error())
+				return
 			}
 
 			defer destination.Close()
 			if err != nil {
-				return err
+				res.Status(http.StatusBadRequest).Text(err.Error())
+				return
 			}
 
 			_, err = io.Copy(destination, file)
-
 			if err != nil {
-				return err
+				res.Status(http.StatusBadRequest).Text(err.Error())
+				return
 			}
 
-			return next(rw, r)
+			next(rw, r)
 		}
 	}
 }

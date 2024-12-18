@@ -13,8 +13,8 @@ var (
 	ErrorForbidden = errors.New("forbidden")
 )
 
-func defaultErrorHandler(rw http.ResponseWriter, err error) error {
-	return ngamux.Res(rw).Status(http.StatusForbidden).JSON(ngamux.Map{
+func defaultErrorHandler(rw http.ResponseWriter, err error) {
+	ngamux.Res(rw).Status(http.StatusForbidden).JSON(ngamux.Map{
 		"error": err.Error(),
 	})
 }
@@ -27,10 +27,11 @@ func New(configs ...Config) func(next ngamux.Handler) ngamux.Handler {
 	config = makeConfig(config)
 
 	return func(next ngamux.Handler) ngamux.Handler {
-		return func(rw http.ResponseWriter, r *http.Request) error {
+		return func(rw http.ResponseWriter, r *http.Request) {
 			authorizationHeader := r.Header.Get(config.Header)
 			if authorizationHeader == "" {
-				return config.ErrorHandler(rw, ErrorForbidden)
+				config.ErrorHandler(rw, ErrorForbidden)
+				return
 			}
 
 			tokenString := strings.ReplaceAll(authorizationHeader, "Bearer ", "")
@@ -38,10 +39,11 @@ func New(configs ...Config) func(next ngamux.Handler) ngamux.Handler {
 			if err == nil && token.Valid {
 				tmpR := ngamux.Req(r)
 				tmpR.Locals(config.ContextKey, token)
-				return next(rw, tmpR.Request)
+				next(rw, tmpR.Request)
+				return
 			}
 
-			return config.ErrorHandler(rw, err)
+			config.ErrorHandler(rw, err)
 		}
 	}
 }

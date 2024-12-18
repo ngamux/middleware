@@ -18,51 +18,40 @@ func New(mux inputNew, cfgs ...Config) func(ngamux.Handler) ngamux.Handler {
 	}
 
 	prefix := cfg.Prefix + "/debug"
-	mux.HandlerFunc(http.MethodGet, prefix+"/pprof", func(w http.ResponseWriter, r *http.Request) error {
+	mux.HandlerFunc(http.MethodGet, prefix+"/pprof", func(w http.ResponseWriter, r *http.Request) {
 		pprof.Index(w, r)
-		return nil
 	})
-	mux.HandlerFunc(http.MethodGet, prefix+"/allocs", func(w http.ResponseWriter, r *http.Request) error {
+	mux.HandlerFunc(http.MethodGet, prefix+"/allocs", func(w http.ResponseWriter, r *http.Request) {
 		pprof.Handler("allocs").ServeHTTP(w, r)
-		return nil
 	})
-	mux.HandlerFunc(http.MethodGet, prefix+"/block", func(w http.ResponseWriter, r *http.Request) error {
+	mux.HandlerFunc(http.MethodGet, prefix+"/block", func(w http.ResponseWriter, r *http.Request) {
 		pprof.Handler("block").ServeHTTP(w, r)
-		return nil
 	})
-	mux.HandlerFunc(http.MethodGet, prefix+"/cmdline", func(w http.ResponseWriter, r *http.Request) error {
+	mux.HandlerFunc(http.MethodGet, prefix+"/cmdline", func(w http.ResponseWriter, r *http.Request) {
 		pprof.Cmdline(w, r)
-		return nil
 	})
-	mux.HandlerFunc(http.MethodGet, prefix+"/goroutine", func(w http.ResponseWriter, r *http.Request) error {
+	mux.HandlerFunc(http.MethodGet, prefix+"/goroutine", func(w http.ResponseWriter, r *http.Request) {
 		pprof.Handler("goroutine").ServeHTTP(w, r)
-		return nil
 	})
-	mux.HandlerFunc(http.MethodGet, prefix+"/heap", func(w http.ResponseWriter, r *http.Request) error {
+	mux.HandlerFunc(http.MethodGet, prefix+"/heap", func(w http.ResponseWriter, r *http.Request) {
 		pprof.Handler("heap").ServeHTTP(w, r)
-		return nil
 	})
-	mux.HandlerFunc(http.MethodGet, prefix+"/mutex", func(w http.ResponseWriter, r *http.Request) error {
+	mux.HandlerFunc(http.MethodGet, prefix+"/mutex", func(w http.ResponseWriter, r *http.Request) {
 		pprof.Handler("mutex").ServeHTTP(w, r)
-		return nil
 	})
-	mux.HandlerFunc(http.MethodGet, prefix+"/profile", func(w http.ResponseWriter, r *http.Request) error {
+	mux.HandlerFunc(http.MethodGet, prefix+"/profile", func(w http.ResponseWriter, r *http.Request) {
 		pprof.Profile(w, r)
-		return nil
 	})
-	mux.HandlerFunc(http.MethodGet, prefix+"/threadcreate", func(w http.ResponseWriter, r *http.Request) error {
+	mux.HandlerFunc(http.MethodGet, prefix+"/threadcreate", func(w http.ResponseWriter, r *http.Request) {
 		pprof.Handler("threadcreate").ServeHTTP(w, r)
-		return nil
 	})
-	mux.HandlerFunc(http.MethodGet, prefix+"/trace", func(w http.ResponseWriter, r *http.Request) error {
+	mux.HandlerFunc(http.MethodGet, prefix+"/trace", func(w http.ResponseWriter, r *http.Request) {
 		pprof.Trace(w, r)
-		return nil
 	})
 
 	return func(next ngamux.Handler) ngamux.Handler {
-		return func(rw http.ResponseWriter, r *http.Request) error {
-			return next(rw, r)
+		return func(rw http.ResponseWriter, r *http.Request) {
+			next(rw, r)
 		}
-
 	}
 }

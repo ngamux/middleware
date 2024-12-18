@@ -10,7 +10,7 @@ type Config struct {
 	SigningKey   []byte
 	ContextKey   string
 	Header       string
-	ErrorHandler func(rw http.ResponseWriter, err error) error
+	ErrorHandler func(rw http.ResponseWriter, err error)
 }
 
 func makeConfig(config Config) Config {

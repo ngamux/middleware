@@ -25,13 +25,13 @@ func New(config ...Config) func(next ngamux.Handler) ngamux.Handler {
 	}
 
 	return func(next ngamux.Handler) ngamux.Handler {
-		return func(rw http.ResponseWriter, r *http.Request) error {
+		return func(rw http.ResponseWriter, r *http.Request) {
 			defer func() {
 				if err := recover(); err != nil {
 					cfg.ErrorHandler(rw, r, errors.New(err.(string)))
 				}
 			}()
-			return next(rw, r)
+			next(rw, r)
 		}
 	}
 }

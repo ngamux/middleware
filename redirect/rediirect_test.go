@@ -9,7 +9,7 @@ import (
 func BenchmarkLog(b *testing.B) {
 	b.Run("new", func(b *testing.B) {
 		middleware := New()
-		handler := func(rw http.ResponseWriter, r *http.Request) error { return nil }
+		handler := func(rw http.ResponseWriter, r *http.Request) {}
 		result := middleware(handler)
 
 		rec := httptest.NewRecorder()
@@ -17,7 +17,7 @@ func BenchmarkLog(b *testing.B) {
 
 		b.ResetTimer()
 		for i := 0; i < b.N; i++ {
-			_ = result(rec, req)
+			result(rec, req)
 		}
 	})
 }

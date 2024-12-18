@@ -19,7 +19,7 @@ var (
 // You can also provide a realm name for the challenge authentication method.
 type BasicConfig struct {
 	Authorizer   func(username string, password string) bool
-	ErrorHandler func(rw http.ResponseWriter, err error) error
+	ErrorHandler func(rw http.ResponseWriter, err error)
 	Realm        string
 	Creds        map[string]string
 }
@@ -32,17 +32,19 @@ func Basic(configs ...BasicConfig) ngamux.MiddlewareFunc {
 	config = makeBasicConfig(config)
 
 	return func(next ngamux.Handler) ngamux.Handler {
-		return func(rw http.ResponseWriter, r *http.Request) error {
+		return func(rw http.ResponseWriter, r *http.Request) {
 			username, password, ok := r.BasicAuth()
 			if !ok {
-				return config.ErrorHandler(rw, ErrorUnauthorized)
+				config.ErrorHandler(rw, ErrorUnauthorized)
+				return
 			}
 
 			if ok := config.Authorizer(username, password); !ok {
-				return config.ErrorHandler(rw, ErrorUnauthorized)
+				config.ErrorHandler(rw, ErrorUnauthorized)
+				return
 			}
 
-			return next(rw, r)
+			next(rw, r)
 		}
 	}
 }
@@ -79,7 +81,7 @@ func (c *BasicConfig) defaultAuthorizer(username string, password string) bool {
 	return subtle.ConstantTimeCompare(passwordHash[:], expectedPasswordHash[:]) == 1
 }
 
-func (c *BasicConfig) defaultBasicErrorHandler(rw http.ResponseWriter, err error) error {
+func (c *BasicConfig) defaultBasicErrorHandler(rw http.ResponseWriter, err error) {
 	// when realm has a value, we set a header WWW-Authenticate to force user agent
 	// that it need to use basic authentication in the given realm. Most browser will then
 	// re-request when they see the header and show a prompt that we need to enter username and password
@@ -88,7 +90,7 @@ func (c *BasicConfig) defaultBasicErrorHandler(rw http.ResponseWriter, err error
 		rw.Header().Set("WWW-Authenticate", "Basic realm="+c.Realm)
 	}
 
-	return ngamux.Res(rw).Status(http.StatusUnauthorized).JSON(ngamux.Map{
+	ngamux.Res(rw).Status(http.StatusUnauthorized).JSON(ngamux.Map{
 		"error": err.Error(),
 	})
 }

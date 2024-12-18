@@ -23,10 +23,9 @@ func TestFileUpload(t *testing.T) {
 		FilenameFunc: func(req *http.Request) (string, error) {
 			return "profile-picture.jpg", nil
 		},
-	})(func(rw http.ResponseWriter, r *http.Request) error {
+	})(func(rw http.ResponseWriter, r *http.Request) {
 		rw.WriteHeader(200)
 		_, _ = rw.Write([]byte("Ok"))
-		return nil
 	}))
 
 	pr, pw := io.Pipe()

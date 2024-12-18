@@ -1,7 +1,6 @@
 package redirect
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 
@@ -18,29 +17,35 @@ func New(configs ...Config) ngamux.MiddlewareFunc {
 	config = buildConfig(config)
 
 	return func(next ngamux.Handler) ngamux.Handler {
-		return func(rw http.ResponseWriter, r *http.Request) error {
+		return func(rw http.ResponseWriter, r *http.Request) {
 			redirectTo, ok := config.Rewrite[r.URL.Path]
 			if !ok {
-				return next(rw, r)
+				next(rw, r)
+				return
 			}
 
+			res_ := ngamux.Res(rw)
 			req, err := http.NewRequest(r.Method, redirectTo, nil)
 			if err != nil {
-				return ngamux.Res(rw).Status(http.StatusInternalServerError).Text(err.Error())
+				res_.Status(http.StatusInternalServerError).Text(err.Error())
+				return
 			}
 
 			client := &http.Client{}
 			res, err := client.Do(req)
 			if err != nil {
-				fmt.Println(err)
-				return ngamux.Res(rw).Status(res.StatusCode).Text(err.Error())
+				res_.Status(res.StatusCode).Text(err.Error())
+				return
 			}
 
 			rw.Header().Set("content-type", res.Header.Get("content-type"))
 			rw.WriteHeader(res.StatusCode)
-			_, _ = io.Copy(rw, res.Body)
+			_, err = io.Copy(rw, res.Body)
+			if err != nil {
+				res_.Status(http.StatusInternalServerError).Text(err.Error())
+				return
+			}
 			defer res.Body.Close()
-			return nil
 		}
 	}
 }

@@ -40,7 +40,7 @@ func New(config ...Config) func(next ngamux.Handler) ngamux.Handler {
 	allowedOrigins := strings.Split(cfg.AllowOrigins, ",")
 
 	return func(next ngamux.Handler) ngamux.Handler {
-		return func(rw http.ResponseWriter, r *http.Request) error {
+		return func(rw http.ResponseWriter, r *http.Request) {
 			allowed := false
 			origin := r.Referer()
 			if origin == "" {
@@ -62,10 +62,12 @@ func New(config ...Config) func(next ngamux.Handler) ngamux.Handler {
 			rw.Header().Set("Access-Control-Allow-Headers", cfg.AllowHeaders)
 
 			if r.Method == http.MethodOptions {
-				return ngamux.Res(rw).Status(http.StatusNoContent).Text("")
+				ngamux.Res(rw).Status(http.StatusNoContent).Text("")
+				return
 			}
 
-			return next(rw, r)
+			next(rw, r)
+			return
 		}
 	}
 }
