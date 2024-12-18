@@ -2,5 +2,3 @@ github.com/golang-jwt/jwt/v4 v4.5.0 h1:7cYmW1XlMY7h7ii7UhUyChSgS5wUJEnm9uZVTGqOW
 github.com/golang-jwt/jwt/v4 v4.5.0/go.mod h1:m21LjoU+eqJr34lmDMbreY2eSTRJ1cv77w39/MY0Ch0=
 github.com/golang-must/must v1.0.0 h1:CRVPmPY30XORfNfYF5sHWB/6DFao1f580tliVUupzwc=
 github.com/golang-must/must v1.0.0/go.mod h1:+Li9TJt2jPOdGvIbcwqNSSDxjmA6PWs6QWxuqGDO1HQ=
-github.com/ngamux/ngamux v1.7.1 h1:xlf6JJWRwSL0JMPL1Ep6bXbr0+PYtCd+hHi6s/6cK84=
-github.com/ngamux/ngamux v1.7.1/go.mod h1:2/T7faPhQWkw0M49KdXfWP+ZRmD0OfA/e/AoKtoZpWA=

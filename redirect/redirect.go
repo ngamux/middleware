@@ -16,7 +16,7 @@ func New(configs ...Config) ngamux.MiddlewareFunc {
 	}
 	config = buildConfig(config)
 
-	return func(next ngamux.Handler) ngamux.Handler {
+	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(rw http.ResponseWriter, r *http.Request) {
 			redirectTo, ok := config.Rewrite[r.URL.Path]
 			if !ok {

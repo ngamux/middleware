@@ -19,14 +19,14 @@ func defaultErrorHandler(rw http.ResponseWriter, err error) {
 	})
 }
 
-func New(configs ...Config) func(next ngamux.Handler) ngamux.Handler {
+func New(configs ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 	var config Config
 	if len(configs) > 0 {
 		config = configs[0]
 	}
 	config = makeConfig(config)
 
-	return func(next ngamux.Handler) ngamux.Handler {
+	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(rw http.ResponseWriter, r *http.Request) {
 			authorizationHeader := r.Header.Get(config.Header)
 			if authorizationHeader == "" {

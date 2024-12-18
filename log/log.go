@@ -4,8 +4,6 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-
-	"github.com/ngamux/ngamux"
 )
 
 const (
@@ -14,7 +12,7 @@ const (
 	TagStatus string = "status"
 )
 
-func New(config ...Config) func(next ngamux.Handler) ngamux.Handler {
+func New(config ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 	cfg := configDefault()
 	cfg.Handler = slog.NewJSONHandler(os.Stdout, nil)
 
@@ -24,7 +22,7 @@ func New(config ...Config) func(next ngamux.Handler) ngamux.Handler {
 
 	lrw := new(logResponseWriter)
 	logger := slog.New(cfg.Handler)
-	return func(next ngamux.Handler) ngamux.Handler {
+	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(rw http.ResponseWriter, r *http.Request) {
 			newLogResponseWriter(lrw, rw)
 			next(lrw, r)

@@ -9,7 +9,7 @@ import (
 )
 
 func New(config Config) ngamux.MiddlewareFunc {
-	return func(next ngamux.Handler) ngamux.Handler {
+	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(rw http.ResponseWriter, r *http.Request) {
 			res := ngamux.Res(rw)
 			err := r.ParseMultipartForm(config.MaxMemoryLimit)

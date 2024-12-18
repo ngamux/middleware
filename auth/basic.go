@@ -31,7 +31,7 @@ func Basic(configs ...BasicConfig) ngamux.MiddlewareFunc {
 	}
 	config = makeBasicConfig(config)
 
-	return func(next ngamux.Handler) ngamux.Handler {
+	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(rw http.ResponseWriter, r *http.Request) {
 			username, password, ok := r.BasicAuth()
 			if !ok {
