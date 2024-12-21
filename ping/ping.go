@@ -1,7 +1,6 @@
 package ping
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/ngamux/ngamux"
@@ -20,7 +19,6 @@ func New(config ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(rw http.ResponseWriter, r *http.Request) {
-			fmt.Println(123123)
 			if r.URL.Path == cfg.Path {
 				ngamux.Res(rw).Text("pong")
 				return

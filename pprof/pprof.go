@@ -3,6 +3,7 @@ package pprof
 import (
 	"net/http"
 	"net/http/pprof"
+	"path"
 )
 
 func New(cfgs ...Config) func(http.HandlerFunc) http.HandlerFunc {
@@ -11,11 +12,11 @@ func New(cfgs ...Config) func(http.HandlerFunc) http.HandlerFunc {
 		cfg = cfgs[0]
 	}
 
-	prefix := cfg.Prefix + "/debug"
+	prefix := path.Join(cfg.Prefix, "pprof")
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			switch r.URL.Path {
-			case prefix + "/pprof":
+			case prefix:
 				pprof.Index(w, r)
 			case prefix + "/allocs":
 				pprof.Handler("allocs").ServeHTTP(w, r)
