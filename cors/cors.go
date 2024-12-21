@@ -67,7 +67,6 @@ func New(config ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 			}
 
 			next(rw, r)
-			return
 		}
 	}
 }
