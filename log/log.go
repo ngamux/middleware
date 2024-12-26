@@ -20,11 +20,10 @@ func New(config ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 		cfg = config[0]
 	}
 
-	lrw := new(logResponseWriter)
 	logger := slog.New(cfg.Handler)
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(rw http.ResponseWriter, r *http.Request) {
-			newLogResponseWriter(lrw, rw)
+			lrw := newLogResponseWriter(rw)
 			next(lrw, r)
 			logger.Info("", "method", r.Method, "path", r.URL.Path, "status", lrw.statusCode)
 		}
