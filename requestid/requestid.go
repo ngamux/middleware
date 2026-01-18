@@ -3,11 +3,9 @@ package requestid
 import (
 	"context"
 	"net/http"
-
-	"github.com/ngamux/ngamux"
 )
 
-func New(opts ...func(*config)) ngamux.MiddlewareFunc {
+func New(opts ...func(*config)) func(http.HandlerFunc) http.HandlerFunc {
 	c := &config{
 		KeyHeader: cKeyHeader,
 		ID:        cID,

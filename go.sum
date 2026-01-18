@@ -4,5 +4,5 @@ github.com/golang-must/must v1.0.0 h1:CRVPmPY30XORfNfYF5sHWB/6DFao1f580tliVUupzw
 github.com/golang-must/must v1.0.0/go.mod h1:+Li9TJt2jPOdGvIbcwqNSSDxjmA6PWs6QWxuqGDO1HQ=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
-github.com/ngamux/ngamux v1.7.42 h1:yvkD2MjIV1eWZaj8QmGZvzRu4XpCQ874gBbCYtw7yWw=
-github.com/ngamux/ngamux v1.7.42/go.mod h1:2/T7faPhQWkw0M49KdXfWP+ZRmD0OfA/e/AoKtoZpWA=
+github.com/ngamux/ngamux v1.7.51 h1:+Megy3fGQZydNHBJfag/MSkWbHyx1npYz+VxZ3zEjPs=
+github.com/ngamux/ngamux v1.7.51/go.mod h1:k3L+ZyuNtVdKlXKL9Wjly/IcLC3yAz9lFZmUPcLPCBE=

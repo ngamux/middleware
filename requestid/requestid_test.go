@@ -23,7 +23,7 @@ func TestNew(t *testing.T) {
 			func(t *testing.T, c *config, w http.ResponseWriter, r *http.Request) {
 				must.NotEqual(t, "", w.Header().Get(cKeyHeader()))
 				must.NotEqual(t, "", r.Header.Get(cKeyHeader()))
-				must.NotNil(t, r.Context().Value(cKeyHeader()))
+				must.NotNil(t, r.Context().Value(keyHeader(cKeyHeader())))
 			},
 		},
 		{
@@ -33,7 +33,7 @@ func TestNew(t *testing.T) {
 			func(t *testing.T, c *config, w http.ResponseWriter, r *http.Request) {
 				must.NotEqual(t, "", w.Header().Get(c.KeyHeader()))
 				must.NotEqual(t, "", r.Header.Get(c.KeyHeader()))
-				must.NotNil(t, r.Context().Value(c.KeyHeader()))
+				must.NotNil(t, r.Context().Value(keyHeader(c.KeyHeader())))
 			},
 		},
 		{
@@ -43,7 +43,7 @@ func TestNew(t *testing.T) {
 			func(t *testing.T, c *config, w http.ResponseWriter, r *http.Request) {
 				must.Equal(t, c.ID(), w.Header().Get(cKeyHeader()))
 				must.Equal(t, c.ID(), r.Header.Get(cKeyHeader()))
-				must.Equal(t, c.ID(), r.Context().Value(cKeyHeader()))
+				must.Equal(t, c.ID(), r.Context().Value(keyHeader(cKeyHeader())))
 			},
 		},
 		{
@@ -53,7 +53,7 @@ func TestNew(t *testing.T) {
 			func(t *testing.T, c *config, w http.ResponseWriter, r *http.Request) {
 				must.NotEqual(t, "", w.Header().Get(cKeyHeader()))
 				must.NotEqual(t, "", r.Header.Get(cKeyHeader()))
-				must.NotNil(t, r.Context().Value(cKeyHeader()))
+				must.NotNil(t, r.Context().Value(keyHeader(cKeyHeader())))
 			},
 		},
 		{
@@ -63,7 +63,7 @@ func TestNew(t *testing.T) {
 			func(t *testing.T, c *config, w http.ResponseWriter, r *http.Request) {
 				must.NotEqual(t, "", w.Header().Get(cKeyHeader()))
 				must.NotEqual(t, "", r.Header.Get(cKeyHeader()))
-				must.NotNil(t, r.Context().Value(cKeyHeader()))
+				must.NotNil(t, r.Context().Value(keyHeader(cKeyHeader())))
 			},
 		},
 	}
