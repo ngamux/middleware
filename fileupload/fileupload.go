@@ -26,7 +26,9 @@ func New(config Config) ngamux.MiddlewareFunc {
 				return
 			}
 
-			defer file.Close()
+			defer func() {
+				_ = file.Close()
+			}()
 
 			filename, err := config.FilenameFunc(r)
 			if err != nil {
@@ -46,11 +48,9 @@ func New(config Config) ngamux.MiddlewareFunc {
 				return
 			}
 
-			defer destination.Close()
-			if err != nil {
-				res.Status(http.StatusBadRequest).Text(err.Error())
-				return
-			}
+			defer func() {
+				_ = destination.Close()
+			}()
 
 			_, err = io.Copy(destination, file)
 			if err != nil {

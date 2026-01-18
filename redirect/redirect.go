@@ -45,7 +45,9 @@ func New(configs ...Config) ngamux.MiddlewareFunc {
 				res_.Status(http.StatusInternalServerError).Text(err.Error())
 				return
 			}
-			defer res.Body.Close()
+			defer func() {
+				_ = res.Body.Close()
+			}()
 		}
 	}
 }

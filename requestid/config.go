@@ -2,6 +2,7 @@ package requestid
 
 import "github.com/google/uuid"
 
+type keyHeader string
 type config struct {
 	KeyHeader func() string
 	ID        func() string

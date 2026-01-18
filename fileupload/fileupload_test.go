@@ -31,7 +31,10 @@ func TestFileUpload(t *testing.T) {
 	pr, pw := io.Pipe()
 	writer := multipart.NewWriter(pw)
 	go func() {
-		defer writer.Close()
+		defer func() {
+			_ = writer.Close()
+		}()
+
 		//we create the form data field 'fileupload'
 		//wich returns another writer to write the actual file
 		part, err := writer.CreateFormFile("report", "someimg.png")
@@ -68,7 +71,7 @@ func TestFileUpload(t *testing.T) {
 		t.Error("File is not uploaded to given destination")
 	}
 
-	os.RemoveAll("uploads")
+	_ = os.RemoveAll("uploads")
 }
 
 func createImage() *image.RGBA {
@@ -84,8 +87,8 @@ func createImage() *image.RGBA {
 	cyan := color.RGBA{100, 200, 200, 0xff}
 
 	// Set color for each pixel.
-	for x := 0; x < width; x++ {
-		for y := 0; y < height; y++ {
+	for x := range width {
+		for y := range height {
 			switch {
 			case x < width/2 && y < height/2: // upper left quadrant
 				img.Set(x, y, cyan)

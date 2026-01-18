@@ -2,7 +2,6 @@ package requestid
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 
 	"github.com/ngamux/ngamux"
@@ -19,7 +18,6 @@ func New(opts ...func(*config)) ngamux.MiddlewareFunc {
 	}
 
 	return func(next http.HandlerFunc) http.HandlerFunc {
-		fmt.Println(123)
 		return func(w http.ResponseWriter, r *http.Request) {
 			key := c.KeyHeader()
 			id := r.Header.Get(key)
@@ -27,7 +25,7 @@ func New(opts ...func(*config)) ngamux.MiddlewareFunc {
 				id = c.ID()
 			}
 
-			ctx := context.WithValue(r.Context(), c.KeyHeader(), id)
+			ctx := context.WithValue(r.Context(), keyHeader(c.KeyHeader()), id)
 
 			r.Header.Set(key, id)
 			w.Header().Set(key, id)

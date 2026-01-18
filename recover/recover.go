@@ -10,7 +10,7 @@ import (
 var configDefault = Config{
 	ErrorHandler: func(rw http.ResponseWriter, r *http.Request, e error) {
 		rw.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprintln(rw, e)
+		_, _ = fmt.Fprintln(rw, e)
 		log.Println("error:", e)
 	},
 }
