@@ -24,7 +24,7 @@ jobs:
         with:
           version: latest
       - name: Run Vet
-        run: go vet
+        run: go vet ./...
 
   test:
     runs-on: ubuntu-latest
