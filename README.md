@@ -8,6 +8,7 @@ Collection of middlewares for Ngamux HTTP router
 * [Static](./static)
 * [FileUpload](./fileupload)
 * [RequestID](./requestid)
+* [PPROF](./pprof)
 
 # License
 This project is under [Mozilla Public License 2.0](./LICENSE)
