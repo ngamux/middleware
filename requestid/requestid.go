@@ -23,7 +23,7 @@ func New(opts ...func(*config)) func(http.HandlerFunc) http.HandlerFunc {
 				id = c.ID()
 			}
 
-			ctx := context.WithValue(r.Context(), keyHeader(c.KeyHeader()), id)
+			ctx := context.WithValue(r.Context(), keyHeader(key), id)
 
 			r.Header.Set(key, id)
 			w.Header().Set(key, id)
