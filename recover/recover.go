@@ -26,7 +26,11 @@ func New(config ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 		return func(rw http.ResponseWriter, r *http.Request) {
 			defer func() {
 				if err := recover(); err != nil {
-					cfg.ErrorHandler(rw, r, errors.New(err.(string)))
+					e, ok := err.(error)
+					if !ok {
+						e = errors.New(fmt.Sprint(err))
+					}
+					cfg.ErrorHandler(rw, r, e)
 				}
 			}()
 			next(rw, r)
