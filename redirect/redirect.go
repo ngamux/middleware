@@ -34,7 +34,11 @@ func New(configs ...Config) ngamux.MiddlewareFunc {
 			client := &http.Client{}
 			res, err := client.Do(req)
 			if err != nil {
-				res_.Status(res.StatusCode).Text(err.Error())
+				statusCode := http.StatusBadGateway
+				if res != nil {
+					statusCode = res.StatusCode
+				}
+				res_.Status(statusCode).Text(err.Error())
 				return
 			}
 
