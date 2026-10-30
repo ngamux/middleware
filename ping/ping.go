@@ -13,8 +13,8 @@ var configDefault = Config{
 func New(config ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 	cfg := configDefault
 
-	if len(config) > 0 {
-		cfg = config[0]
+	if len(config) > 0 && config[0].Path != "" {
+		cfg.Path = config[0].Path
 	}
 
 	return func(next http.HandlerFunc) http.HandlerFunc {
