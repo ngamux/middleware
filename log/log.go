@@ -14,10 +14,13 @@ const (
 
 func New(config ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 	cfg := configDefault()
-	cfg.Handler = slog.NewJSONHandler(os.Stdout, nil)
 
 	if len(config) > 0 {
 		cfg = config[0]
+	}
+
+	if cfg.Handler == nil {
+		cfg.Handler = slog.NewJSONHandler(os.Stdout, nil)
 	}
 
 	logger := slog.New(cfg.Handler)
