@@ -2,6 +2,7 @@ package cors
 
 import (
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/ngamux/ngamux"
@@ -44,7 +45,9 @@ func New(config ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 			allowed := false
 			origin := r.Header.Get("Origin")
 			if origin == "" {
-				origin = r.Referer()
+				if ref, err := url.Parse(r.Referer()); err == nil && ref.Host != "" {
+					origin = ref.Scheme + "://" + ref.Host
+				}
 			}
 			origin = strings.TrimRight(origin, "/")
 			for _, o := range allowedOrigins {
