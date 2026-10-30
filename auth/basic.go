@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"crypto/subtle"
 	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/ngamux/ngamux"
@@ -87,7 +88,7 @@ func (c *BasicConfig) defaultBasicErrorHandler(rw http.ResponseWriter, err error
 	// re-request when they see the header and show a prompt that we need to enter username and password
 	// for the specified realm. The browser can also cache the credential for the subsequent request in the same realm.
 	if c.Realm != "" {
-		rw.Header().Set("WWW-Authenticate", "Basic realm="+c.Realm)
+		rw.Header().Set("WWW-Authenticate", fmt.Sprintf("Basic realm=%q", c.Realm))
 	}
 
 	ngamux.Res(rw).Status(http.StatusUnauthorized).JSON(ngamux.Map{
