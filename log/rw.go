@@ -15,3 +15,9 @@ func (l *logResponseWriter) WriteHeader(status int) {
 	l.statusCode = status
 	l.ResponseWriter.WriteHeader(status)
 }
+
+func (l *logResponseWriter) Flush() {
+	if f, ok := l.ResponseWriter.(http.Flusher); ok {
+		f.Flush()
+	}
+}

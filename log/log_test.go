@@ -34,6 +34,30 @@ func TestNewWithEmptyConfig(t *testing.T) {
 	}
 }
 
+func TestLogResponseWriterImplementsFlusher(t *testing.T) {
+	var got http.ResponseWriter
+
+	middleware := New()
+	handler := func(rw http.ResponseWriter, r *http.Request) {
+		got = rw
+	}
+	result := middleware(handler)
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/", nil)
+	result(rec, req)
+
+	flusher, ok := got.(http.Flusher)
+	if !ok {
+		t.Fatal("response writer passed to next does not implement http.Flusher")
+	}
+
+	flusher.Flush()
+	if !rec.Flushed {
+		t.Error("Flush was not propagated to the underlying response writer")
+	}
+}
+
 func BenchmarkLog(b *testing.B) {
 	b.Run("new", func(b *testing.B) {
 		middleware := New()
