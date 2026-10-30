@@ -34,7 +34,11 @@ func New(configs ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 				return
 			}
 
-			tokenString := strings.ReplaceAll(authorizationHeader, "Bearer ", "")
+			const bearerPrefix = "Bearer "
+			tokenString := authorizationHeader
+			if len(authorizationHeader) > len(bearerPrefix) && strings.EqualFold(authorizationHeader[:len(bearerPrefix)], bearerPrefix) {
+				tokenString = authorizationHeader[len(bearerPrefix):]
+			}
 			token, err := jwt.Parse(tokenString, config.keyFunc)
 			if err == nil && token.Valid {
 				tmpR := ngamux.Req(r)
