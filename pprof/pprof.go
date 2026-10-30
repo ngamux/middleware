@@ -9,7 +9,7 @@ import (
 func New() func(http.HandlerFunc) http.HandlerFunc {
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			if !strings.HasPrefix(r.URL.Path, "/debug/pprof") {
+			if r.URL.Path != "/debug/pprof" && !strings.HasPrefix(r.URL.Path, "/debug/pprof/") {
 				next(w, r)
 				return
 			}
