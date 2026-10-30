@@ -42,9 +42,9 @@ func New(config ...Config) func(next http.HandlerFunc) http.HandlerFunc {
 	return func(next http.HandlerFunc) http.HandlerFunc {
 		return func(rw http.ResponseWriter, r *http.Request) {
 			allowed := false
-			origin := r.Referer()
+			origin := r.Header.Get("Origin")
 			if origin == "" {
-				origin = r.Header.Get("Origin")
+				origin = r.Referer()
 			}
 			origin = strings.TrimRight(origin, "/")
 			for _, o := range allowedOrigins {
