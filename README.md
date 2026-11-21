@@ -10,6 +10,7 @@ Collection of middlewares for Ngamux HTTP router
 * [RequestID](./requestid)
 * [PPROF](./pprof)
 * [RateLimit](./ratelimit)
+* [Timeout](./timeout)
 
 # License
 This project is under [Mozilla Public License 2.0](./LICENSE)
