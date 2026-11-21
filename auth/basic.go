@@ -16,7 +16,7 @@ var (
 
 // BasicConfig is a configuration used in Basic function for basic authentication middleware.
 // If credentials, authorizer, or errorhandler is not provided, it uses the default one when passed as an argument to Basic function.
-// For default crendetials, there is default root:root credential stored inside a map with this format `username=password`.
+// For default credentials, there is default root:root credential stored inside a map with this format `username=password`.
 // You can also provide a realm name for the challenge authentication method.
 type BasicConfig struct {
 	Authorizer   func(username string, password string) bool
@@ -25,6 +25,8 @@ type BasicConfig struct {
 	Creds        map[string]string
 }
 
+// Basic returns a middleware that authenticates requests using HTTP Basic
+// authentication.
 func Basic(configs ...BasicConfig) ngamux.MiddlewareFunc {
 	var config BasicConfig
 	if len(configs) > 0 {

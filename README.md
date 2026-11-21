@@ -2,6 +2,7 @@
 Collection of middlewares for Ngamux HTTP router
 
 # Provided Middlewares
+* [Auth](./auth)
 * [CORS](./cors)
 * [Log](./log)
 * [Recover](./recover)
