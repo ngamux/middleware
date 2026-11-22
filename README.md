@@ -15,6 +15,7 @@ Collection of middlewares for Ngamux HTTP router
 * [PPROF](./pprof)
 * [RateLimit](./ratelimit)
 * [RealIP](./realip)
+* [Redirect](./redirect)
 * [Timeout](./timeout)
 
 # License
