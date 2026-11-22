@@ -6,6 +6,7 @@ Collection of middlewares for Ngamux HTTP router
 * [BodyLimit](./bodylimit)
 * [Compress](./compress)
 * [CORS](./cors)
+* [Idempotency](./idempotency)
 * [Log](./log)
 * [Recover](./recover)
 * [Static](./static)
