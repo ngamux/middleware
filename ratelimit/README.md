@@ -23,13 +23,7 @@ ratelimitMiddleware := ratelimit.New(ratelimit.Config{
 	Requests: 60,
 	Window:   time.Minute,
 	Burst:    60,
-	KeyFunc: func(r *http.Request) string {
-		host, _, err := net.SplitHostPort(r.RemoteAddr)
-		if err != nil {
-			return r.RemoteAddr
-		}
-		return host
-	},
+	KeyFunc: ratelimit.KeyFunc_ByClientIP,
 	ErrorHandler: func(rw http.ResponseWriter, _ *http.Request, retryAfter time.Duration) {
 		seconds := int(math.Ceil(retryAfter.Seconds()))
 		if seconds < 1 {

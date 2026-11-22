@@ -1,7 +1,6 @@
 package ratelimit
 
 import (
-	"net"
 	"net/http"
 	"time"
 )
@@ -20,12 +19,7 @@ const (
 )
 
 func defaultKeyFunc(r *http.Request) string {
-	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err != nil {
-		return r.RemoteAddr
-	}
-
-	return host
+	return KeyFunc_ByClientIP(r)
 }
 
 func buildConfig(config Config) Config {
