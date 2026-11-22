@@ -10,22 +10,6 @@ import (
 	"github.com/ngamux/ngamux"
 )
 
-func jwtAuthorizer(signingKey []byte) func(token string) (any, error) {
-	return func(tokenString string) (any, error) {
-		token, err := jwt.Parse(tokenString, func(*jwt.Token) (any, error) {
-			return signingKey, nil
-		})
-		if err != nil {
-			return nil, err
-		}
-		if !token.Valid {
-			return nil, ErrorForbidden
-		}
-
-		return token, nil
-	}
-}
-
 func TestBearerAcceptsAnyCaseForBearerScheme(t *testing.T) {
 	middleware := Bearer(BearerConfig{
 		Authorizer: func(token string) (any, error) {
@@ -165,7 +149,7 @@ func TestBearerSupportsJWTAuthorizer(t *testing.T) {
 
 	nextCalled := false
 	handler := Bearer(BearerConfig{
-		Authorizer: jwtAuthorizer(signingKey),
+		Authorizer: AuthorizerJWT(signingKey),
 	})(func(rw http.ResponseWriter, r *http.Request) {
 		nextCalled = true
 		rw.WriteHeader(http.StatusNoContent)
@@ -195,7 +179,7 @@ func TestBearerRejectsInvalidJWTSignature(t *testing.T) {
 
 	nextCalled := false
 	handler := Bearer(BearerConfig{
-		Authorizer: jwtAuthorizer([]byte("other-key")),
+		Authorizer: AuthorizerJWT([]byte("other-key")),
 	})(func(http.ResponseWriter, *http.Request) {
 		nextCalled = true
 	})

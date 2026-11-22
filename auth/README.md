@@ -45,11 +45,7 @@ The token is read from the configured header, with an optional `Bearer ` prefix,
 ## Instance With Config
 ```go
 bearerMiddleware := auth.Bearer(auth.BearerConfig{
-	Authorizer: func(token string) (any, error) {
-		return jwt.Parse(token, func(t *jwt.Token) (any, error) {
-			return []byte("secret"), nil
-		})
-	},
+	Authorizer: auth.AuthorizerJWT([]byte("secret")),
 })
 ```
 
