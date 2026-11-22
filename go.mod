@@ -1,6 +1,6 @@
 module github.com/ngamux/middleware
 
-go 1.26
+go 1.27
 
 require (
 	github.com/andybalholm/brotli v1.3.0
