@@ -8,7 +8,7 @@ require (
 	github.com/golang-must/must v1.0.0
 	github.com/google/uuid v1.6.0
 	github.com/klauspost/compress v1.20.5
-	github.com/ngamux/ngamux v1.7.53
+	github.com/ngamux/ngamux v1.7.54
 )
 
 // replace github.com/ngamux/ngamux => ../ngamux
